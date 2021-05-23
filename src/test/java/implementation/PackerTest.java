@@ -11,9 +11,22 @@ public class PackerTest {
 
 	 	
 	
+//	@Test
+//	public void testPack() throws APIException {
+//		String fileAbsPath = "C:\\workspaces\\dev\\mobiquity\\implementation\\src\\test\\resources\\testFile2.txt";
+//		
+//		String result = Packer.pack(fileAbsPath); 
+//		
+//		System.out.println(result);
+//		
+//		assertNotNull(result);
+//		
+//	}
+	
+	
 	@Test
-	public void testPack() throws APIException {
-		String fileAbsPath = "C:\\workspaces\\dev\\mobiquity\\implementation\\src\\test\\resources\\testFile1.txt";
+	public void testPackError() throws APIException {
+		String fileAbsPath = "C:\\workspaces\\dev\\mobiquity\\implementation\\src\\test\\resources\\testFileError1.txt";
 		
 		String result = Packer.pack(fileAbsPath); 
 		
@@ -22,7 +35,6 @@ public class PackerTest {
 		assertNotNull(result);
 		
 	}
-	
 	
 	
  

@@ -16,12 +16,11 @@ public class Packer {
 
 	public static String pack(String filePath) throws APIException {
 		
-		DebugLogger.logger.setLevel(Level.OFF);
+		DebugLogger.logger.setLevel(Level.ALL);//open or close debug display
 		
 		int maxDigit = 0;
 		double binaryBaseNo = 2;
-		double b = maxDigit;
-		double power = Math.pow(binaryBaseNo, b);
+		double power = Math.pow(binaryBaseNo, maxDigit);
 		StringBuilder packagingResut = new StringBuilder();
  
 		ArrayList<PackageRow> input = null;
@@ -32,37 +31,38 @@ public class Packer {
 			throw new APIException(filePath + " file can not be loaded",e1);
 		}
 
-		DebugLogger.LogDebugInfo("\n--------hesaplama basliyor-------\n");
+		DebugLogger.LogDebugInfo("\n--------Calculation begins-------\n");
 		DebugLogger.LogDebugInfo("cmbntn : binEquivalent : Weight : Cost");
 		DebugLogger.LogDebugInfo("---------------------------------------");
 
 		for (int j = 0; j < input.size(); j++) {
 
-			PackageRow row = input.get(j);
-			maxDigit = row.getItemList().size();
-			power = Math.pow(binaryBaseNo, maxDigit);
 			PackageRow pr = input.get(j);
+			maxDigit = pr.getItemList().size();
+			power = Math.pow(binaryBaseNo, maxDigit);
 
 			for (int i = 0; i < power; i++) {
 
-				String binEquivalent = Integer.toString(i, 2);
-				binEquivalent = Strings.padStart(binEquivalent, maxDigit, '0');// String.format("%010d", binEquivalent);
+				String binEquivalent = Integer.toString(i, 2);				
+				binEquivalent = Strings.padStart(binEquivalent, maxDigit, Constants.paddingCharForBinaryRepresentation);
 				
 				CalculateCombinationsCost(pr, binEquivalent);
+				
+				if (DebugLogger.logger.getLevel().equals(Constants.logLevel)) {
 
-//				PackageCombinationResult packageCombinationResult = CalculateCombinationsCost(pr, binEquivalent);
-//
-//				String prCombinationWeight = String.valueOf(packageCombinationResult.getTotalWeightOfItems());
-//				String prCombinationCost = String.valueOf(packageCombinationResult.getTotalCostOfItemsInPackage());//
-//				String optimumChoice = pr.getBinEquivalentOfOptimumCost().equals(binEquivalent) ? "*" : "";
-//
-//				DebugLogger.LogDebugInfo(Strings.padStart(String.valueOf(i), maxDigit, '0') + " : " + binEquivalent + " : "
-//						+ Strings.padStart(prCombinationWeight, 10, ' ') + "	 : "
-//						+ Strings.padStart(prCombinationCost, 10, ' ') + " " + optimumChoice);
+					PackageCombinationResult packageCombinationResult = CalculateCombinationsCost(pr, binEquivalent);
+
+					String prCombinationWeight = String.valueOf(packageCombinationResult.getTotalWeightOfItems());
+					String prCombinationCost = String.valueOf(packageCombinationResult.getTotalCostOfItemsInPackage());//
+					String optimumChoice = pr.getBinEquivalentOfOptimumCost().equals(binEquivalent) ? "*" : "";
+
+					DebugLogger.LogDebugInfo(Strings.padStart(String.valueOf(i), maxDigit, Constants.paddingCharForBinaryRepresentation) + " : " + binEquivalent
+							+ " : " + Strings.padStart(prCombinationWeight, Constants.paddingLength, ' ') + " : "
+							+ Strings.padStart(prCombinationCost, Constants.paddingLength, ' ') + " " + optimumChoice);
+				}
 
 			}
 
-			// System.out.println(row.getBinEquivalentOfOptimumCost());
 			String rowResult = getIndexOfSelectedItemsFromBinaryRepresentation(pr, pr.getBinEquivalentOfOptimumCost());
 			DebugLogger.LogDebugInfo(rowResult);
 			packagingResut.append(rowResult + "\n");

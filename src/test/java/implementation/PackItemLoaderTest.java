@@ -3,11 +3,11 @@ package implementation;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+
 import org.junit.Test;
 
 import com.mobiquity.exception.APIException;
@@ -20,7 +20,7 @@ import com.mobiquity.packer.Validations;
 public class PackItemLoaderTest {
 
 	@Test
-	public void testLoadItems() throws FileNotFoundException, IOException {
+	public void testLoadItems() throws Exception {
 
 		String fileAbsPath = "C:\\workspaces\\dev\\mobiquity\\implementation\\src\\test\\resources\\testFile1.txt"; 
 
@@ -71,7 +71,7 @@ public class PackItemLoaderTest {
 	
 	
 	@Test
-	public void testLoadInvalidItemsWeight() throws FileNotFoundException, IOException {
+	public void testLoadInvalidItemsWeight() throws Exception {
 
 		String fileAbsPath = "C:\\workspaces\\dev\\mobiquity\\implementation\\src\\test\\resources\\testFileWithInvalidWeight.txt";
 

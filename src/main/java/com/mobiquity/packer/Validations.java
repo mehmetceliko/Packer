@@ -5,6 +5,20 @@ import java.util.ArrayList;
 
 public class Validations {
 	
+	
+public static ValidationResult validatePackageRowItemCountToChoose(PackageRow pr) {
+		
+		ArrayList<Item>itemList = pr.getItemList();
+		
+			if (itemList.size() > Constants.MaxItemCountToSelectForPackage) {
+				  
+				return new ValidationResult("Number of item to choose is " + itemList.size() +". " + Constants.maxItemCountIsAchieved,false);
+			}
+		
+		return new ValidationResult("",true);		
+	}
+	
+	
 	public static ValidationResult validatePackageRowItemsCost(PackageRow pr) {
 		
 		ArrayList<Item>itemList = pr.getItemList();
@@ -47,5 +61,42 @@ public class Validations {
 		
 		return new ValidationResult("",true);		
 	}	
+	
+	public static ValidationResult validatePackage(ArrayList<PackageRow> listOfRows) {
+		
+		ArrayList<ValidationResult> vrList = new ArrayList<ValidationResult>();
+		
+		for (PackageRow packageRow : listOfRows) {
+			
+			ValidationResult vr= validatePackageRowWeight(packageRow);
+			if (!vr.isValid)
+				vrList.add(vr);
+			
+			vr= validatePackageRowItemsWeight(packageRow);
+			if (!vr.isValid)
+				vrList.add(vr);
+			
+			vr= validatePackageRowItemsCost(packageRow);
+			if (!vr.isValid)
+				vrList.add(vr);
+			
+			vr= validatePackageRowItemCountToChoose(packageRow);
+			if (!vr.isValid)
+				vrList.add(vr);			
+		}
+		
+		if(vrList.size()>0) {
+			StringBuilder errDesc = new StringBuilder();
+			
+			for (ValidationResult validationResult : vrList) {
+				errDesc.append(validationResult.description+"\n");
+			}
+			
+			return new ValidationResult(errDesc.toString(), false);
+		}
+				
+		return new ValidationResult("",true);		
+	}	
+	
 
 }
