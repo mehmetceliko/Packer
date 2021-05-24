@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 import java.util.logging.Level;
 
 public class Constants {
-	public static final char paddingCharForBinaryRepresentation = '0';
-	public static final int paddingLength = 10;
+	public static final char PaddingCharForBinaryRepresentation = '0';
+	public static final int PaddingLength = 10;
 	
 	public static final BigDecimal MaxWeightLimitOfPackage = BigDecimal.valueOf(100);
 	public static final BigDecimal MaxWeightLimitOfItem = BigDecimal.valueOf(100);

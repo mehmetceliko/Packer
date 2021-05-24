@@ -3,15 +3,15 @@ package com.mobiquity.packer;
 import java.math.BigDecimal;
 
 public class PackageCombinationResult {
-	BigDecimal totalCostOfItemsInPackage = BigDecimal.ZERO;
-	BigDecimal totalWeightOfItems = BigDecimal.ZERO;
-	String binEquivalent;
+	private BigDecimal totalCostOfItemsInPackage = BigDecimal.ZERO;
+	private BigDecimal totalWeightOfItems = BigDecimal.ZERO;
+	private String binEquivalent;
 	
 	public PackageCombinationResult(BigDecimal totalCostOfItemsInPackage, BigDecimal totalWeightOfItems,String binEquivalent) {
 		super();
 		this.totalCostOfItemsInPackage = totalCostOfItemsInPackage;
 		this.totalWeightOfItems = totalWeightOfItems;
-		this.binEquivalent = binEquivalent;
+		this.setBinEquivalent(binEquivalent);
 	}
 	
 	public BigDecimal getTotalCostOfItemsInPackage() {
@@ -25,6 +25,14 @@ public class PackageCombinationResult {
 	}
 	public void setTotalWeightOfItems(BigDecimal totalWeightOfItems) {
 		this.totalWeightOfItems = totalWeightOfItems;
+	}
+
+	public String getBinEquivalent() {
+		return binEquivalent;
+	}
+
+	public void setBinEquivalent(String binEquivalent) {
+		this.binEquivalent = binEquivalent;
 	}
 
 }

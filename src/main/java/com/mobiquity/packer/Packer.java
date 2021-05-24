@@ -1,8 +1,6 @@
 package com.mobiquity.packer;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.logging.Level;
 
 import com.google.common.base.Strings;
 import com.mobiquity.exception.APIException;
@@ -16,7 +14,7 @@ public class Packer {
 
 	public static String pack(String filePath) throws APIException {
 		
-		DebugLogger.logger.setLevel(Level.ALL);//open or close debug display
+		DebugLogger.setDebug(true);//open or close debug display
 		
 		int maxDigit = 0;
 		double binaryBaseNo = 2;
@@ -31,9 +29,9 @@ public class Packer {
 			throw new APIException(filePath + " file can not be loaded",e1);
 		}
 
-		DebugLogger.LogDebugInfo("\n--------Calculation begins-------\n");
-		DebugLogger.LogDebugInfo("cmbntn : binEquivalent : Weight : Cost");
-		DebugLogger.LogDebugInfo("---------------------------------------");
+		DebugLogger.debugLog("\n--------Calculation begins-------\n");
+		DebugLogger.debugLog("cmbntn : binEquivalent : Weight : Cost");
+		DebugLogger.debugLog("---------------------------------------");
 
 		for (int j = 0; j < input.size(); j++) {
 
@@ -44,27 +42,25 @@ public class Packer {
 			for (int i = 0; i < power; i++) {
 
 				String binEquivalent = Integer.toString(i, 2);				
-				binEquivalent = Strings.padStart(binEquivalent, maxDigit, Constants.paddingCharForBinaryRepresentation);
+				binEquivalent = Strings.padStart(binEquivalent, maxDigit, Constants.PaddingCharForBinaryRepresentation);
 				
-				CalculateCombinationsCost(pr, binEquivalent);
+				PackageCombinationResult packageCombinationResult = pr.calculateCombinationsCost(binEquivalent);
 				
-				if (DebugLogger.logger.getLevel().equals(Constants.logLevel)) {
-
-					PackageCombinationResult packageCombinationResult = CalculateCombinationsCost(pr, binEquivalent);
+				if (DebugLogger.logger.getLevel().equals(Constants.logLevel)) {					
 
 					String prCombinationWeight = String.valueOf(packageCombinationResult.getTotalWeightOfItems());
-					String prCombinationCost = String.valueOf(packageCombinationResult.getTotalCostOfItemsInPackage());//
+					String prCombinationCost = String.valueOf(packageCombinationResult.getTotalCostOfItemsInPackage());
 					String optimumChoice = pr.getBinEquivalentOfOptimumCost().equals(binEquivalent) ? "*" : "";
 
-					DebugLogger.LogDebugInfo(Strings.padStart(String.valueOf(i), maxDigit, Constants.paddingCharForBinaryRepresentation) + " : " + binEquivalent
-							+ " : " + Strings.padStart(prCombinationWeight, Constants.paddingLength, ' ') + " : "
-							+ Strings.padStart(prCombinationCost, Constants.paddingLength, ' ') + " " + optimumChoice);
+					DebugLogger.debugLog(Strings.padStart(String.valueOf(i), maxDigit, Constants.PaddingCharForBinaryRepresentation) + " : " + binEquivalent
+							+ " : " + Strings.padStart(prCombinationWeight, Constants.PaddingLength, ' ') + " : "
+							+ Strings.padStart(prCombinationCost, Constants.PaddingLength, ' ') + " " + optimumChoice);
 				}
 
 			}
 
-			String rowResult = getIndexOfSelectedItemsFromBinaryRepresentation(pr, pr.getBinEquivalentOfOptimumCost());
-			DebugLogger.LogDebugInfo(rowResult);
+			String rowResult = pr.getIndexOfSelectedItemsFromBinaryRepresentation();
+			DebugLogger.debugLog(rowResult);
 			packagingResut.append(rowResult + "\n");
 		}
 
@@ -72,54 +68,9 @@ public class Packer {
 	}
 	
 	
-	public static String getIndexOfSelectedItemsFromBinaryRepresentation(PackageRow pr, String binEquivalentOptimum) {
-		ArrayList<String> selectedItems = new ArrayList<>();
-		for (int i = 0; i < binEquivalentOptimum.length();i++) {
-			if (binEquivalentOptimum.charAt(i) == '1')
-				selectedItems.add( String.valueOf(pr.getItemList().get(i).getIndex()));				
-		}
-		
-		String result = "-";
-		
-		for (String str : selectedItems) {
-			
-			if (result.equals("-"))
-				result = str;
-			else 
-				result = result + "," + str;
-		} 
-		 
-		return result;
-	}
-	
-	public static PackageCombinationResult CalculateCombinationsCost(PackageRow pr, String binEquivalent) {
-		
 
-		BigDecimal totalWeightOfItems = BigDecimal.ZERO;
-		BigDecimal totalCostOfItemsInPackage = BigDecimal.ZERO;
-		
-		
-		
-		for ( int i = 0; i < pr.itemList.size();i++) {
-			
-			if (binEquivalent.charAt(i)=='1') {
-			Item item = pr.getItemList().get(i);
-			totalWeightOfItems = totalWeightOfItems.add(  item.getWeight());
-			totalCostOfItemsInPackage = totalCostOfItemsInPackage.add( item.getPrice());
-			}
-		}
-		 
-		//if maxweight is not achieved and the new cost is bigger than the current then the new optimum is thenew one 
-		if (pr.getMaxAllowedWeight().compareTo(totalWeightOfItems) > 0 && totalCostOfItemsInPackage.compareTo(pr.getCost())> 0) {
-			pr.setBinEquivalentOfOptimumCost(binEquivalent);
-			pr.setCost(totalCostOfItemsInPackage);
-		}
 	
-		
-		PackageCombinationResult packageCombinationResult = new PackageCombinationResult(totalCostOfItemsInPackage, totalWeightOfItems,binEquivalent);
-		
-		return packageCombinationResult;
-	}
+
 
 	
 

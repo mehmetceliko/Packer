@@ -3,6 +3,9 @@ package com.mobiquity.packer;
 import java.math.BigDecimal;
 
 public class Item {
+	private int index;
+	private BigDecimal weight=BigDecimal.ZERO;
+	private BigDecimal price =BigDecimal.ZERO;
 	
 	public Item(int index, BigDecimal weight, BigDecimal price) {
 		super();
@@ -11,9 +14,6 @@ public class Item {
 		this.price = price;
 	}
 
-	int index;
-	BigDecimal weight=BigDecimal.ZERO;
-	BigDecimal price =BigDecimal.ZERO;
 	
 	public int getIndex() {
 		return index;
