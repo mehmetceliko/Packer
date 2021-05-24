@@ -14,7 +14,7 @@ public class Packer {
 
 	public static String pack(String filePath) throws APIException {
 		
-		DebugLogger.setDebug(true);//open or close debug display
+		DebugLogger.setDebug(false);//open or close debug display
 		
 		int maxDigit = 0;
 		double binaryBaseNo = 2;
